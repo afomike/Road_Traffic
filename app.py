@@ -1,7 +1,15 @@
+
+# import pickle
+# import sys
+
+# print(f"Pickle version: {pickle.format_version}")
+# print(f"Python version: {sys.version}")
+
 import os
 import pickle
 from flask import Flask, request, render_template, jsonify
 import numpy as np
+
 
 app = Flask(__name__)
 
