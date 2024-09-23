@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development of a Predictive Algorithm for Road Traffic Management</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Development of a Predictive Algorithm for Road Traffic Management</h1>
+        <h2>Using Naïve Bayes Classifier</h2>
+        
+        <p>
+            This application is designed to predict road traffic patterns and aid in the management of traffic flow using a Naïve Bayes-based predictive algorithm. The algorithm analyzes historical traffic data to provide insights and predictions that can help optimize road usage and reduce congestion.
+        </p>
+
+        <form method="POST" action="/predict">
+            <div class="form-group">
+                <div class="form-item">
+                    <label for="AADT">Annual Average Daily Traffic (AADT):</label>
+                    <input type="text" name="AADT" required>
+                </div>
+                <div class="form-item">
+                    <label for="LOCATION">Location (Geographic or physical location):</label>
+                    <input type="text" name="LOCATION" required>
+                </div>
+                <div class="form-item">
+                    <label for="COSITE">Site Code (COSITE):</label>
+                    <input type="text" name="COSITE" required>
+                </div>
+                <div class="form-item">
+                    <label for="SECTION_">Road Section Identifier:</label>
+                    <input type="text" name="SECTION_" required>
+                </div>
+                <div class="form-item">
+                    <label for="X">Longitude (X coordinate):</label>
+                    <input type="text" name="X" required>
+                </div>
+                <div class="form-item">
+                    <label for="Y">Latitude (Y coordinate):</label>
+                    <input type="text" name="Y" required>
+                </div>
+                <div class="form-item">
+                    <label for="TFCTR">Traffic Flow Factor (TFCTR):</label>
+                    <input type="text" name="TFCTR" required>
+                </div>
+                <div class="form-item">
+                    <label for="FID">Feature ID (FID):</label>
+                    <input type="text" name="FID" required>
+                </div>
+                <div class="form-item">
+                    <label for="DFCTR">Daily Flow Factor (DFCTR):</label>
+                    <input type="text" name="DFCTR" required>
+                </div>
+                <div class="form-item">
+                    <label for="KFCTR">K-Factor (KFCTR):</label>
+                    <input type="text" name="KFCTR" required>
+                </div>
+                <div class="form-item">
+                    <label for="model">Select Model:</label>
+                    <select name="model" id="model">
+                        <option value="Naive Bayes">Naive Bayes</option>
+                        <option value="ANN (MLP)">ANN (MLP)</option>
+                        <option value="Decision Tree">Decision Tree</option>
+                        <option value="SVM">SVM</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="prediction-result">
+                <h2>Prediction Result:</h2>
+                <p>{{ prediction_text }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
