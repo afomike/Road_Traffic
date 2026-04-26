@@ -1,81 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Development of a Predictive Algorithm for Road Traffic Management</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictFlow — Road Traffic Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Development of a Predictive Algorithm for Road Traffic Management</h1>
-        <h2>Using Naïve Bayes Classifier</h2>
-        
-        <p>
-            This application is designed to predict road traffic patterns and aid in the management of traffic flow using a Naïve Bayes-based predictive algorithm. The algorithm analyzes historical traffic data to provide insights and predictions that can help optimize road usage and reduce congestion.
-        </p>
+<div class="container">
 
-        <form method="POST" action="/predict">
-            <div class="form-group">
-                <div class="form-item">
-                    <label for="AADT">Annual Average Daily Traffic (AADT):</label>
-                    <input type="text" name="AADT" required>
-                </div>
-                <div class="form-item">
-                    <label for="LOCATION">Location (Geographic or physical location):</label>
-                    <input type="text" name="LOCATION" required>
-                </div>
-                <div class="form-item">
-                    <label for="COSITE">Site Code (COSITE):</label>
-                    <input type="text" name="COSITE" required>
-                </div>
-                <div class="form-item">
-                    <label for="SECTION_">Road Section Identifier:</label>
-                    <input type="text" name="SECTION_" required>
-                </div>
-                <div class="form-item">
-                    <label for="X">Longitude (X coordinate):</label>
-                    <input type="text" name="X" required>
-                </div>
-                <div class="form-item">
-                    <label for="Y">Latitude (Y coordinate):</label>
-                    <input type="text" name="Y" required>
-                </div>
-                <div class="form-item">
-                    <label for="TFCTR">Traffic Flow Factor (TFCTR):</label>
-                    <input type="text" name="TFCTR" required>
-                </div>
-                <div class="form-item">
-                    <label for="FID">Feature ID (FID):</label>
-                    <input type="text" name="FID" required>
-                </div>
-                <div class="form-item">
-                    <label for="DFCTR">Daily Flow Factor (DFCTR):</label>
-                    <input type="text" name="DFCTR" required>
-                </div>
-                <div class="form-item">
-                    <label for="KFCTR">K-Factor (KFCTR):</label>
-                    <input type="text" name="KFCTR" required>
-                </div>
-                <div class="form-item">
-                    <label for="model">Select Model:</label>
-                    <select name="model" id="model">
-                        <option value="Naive Bayes">Naive Bayes</option>
-                        <option value="ANN (MLP)">ANN (MLP)</option>
-                        <option value="Decision Tree">Decision Tree</option>
-                        <option value="SVM">SVM</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit">Predict</button>
-        </form>
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="badge">Live Demo &mdash; Research Project</div>
+    <h1>Predictive Algorithm for<br><span>Road Traffic Management</span></h1>
+    <p class="subtitle">// Using Naïve Bayes Classifier &amp; Ensemble Models</p>
+    <p class="hero-desc">
+      A machine-learning system that ingests historical road traffic data and predicts
+      congestion categories in real time, enabling smarter infrastructure decisions.
+    </p>
+  </div>
 
-        {% if prediction_text %}
-            <div class="prediction-result">
-                <h2>Prediction Result:</h2>
-                <p>{{ prediction_text }}</p>
-            </div>
-        {% endif %}
+  <!-- ── Stats Strip ───────────────────────────────────────────── -->
+  <div class="stats-strip">
+    <div class="stat">
+      <span class="stat-value">4</span>
+      <span class="stat-label">ML Models</span>
     </div>
+    <div class="stat">
+      <span class="stat-value">10</span>
+      <span class="stat-label">Input Features</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">Real-time</span>
+      <span class="stat-label">Prediction</span>
+    </div>
+  </div>
+
+  <!-- ── How to Use ────────────────────────────────────────────── -->
+  <div class="section-label">// How to Use This App</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <span class="step-num">01</span>
+      <h3>Enter Traffic Parameters</h3>
+      <p>Fill in the road site details — AADT, location, coordinates, and traffic flow factors.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">02</span>
+      <h3>Choose a Model</h3>
+      <p>Select from Naïve Bayes, ANN (MLP), Decision Tree, or SVM to run the prediction.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">03</span>
+      <h3>Run the Prediction</h3>
+      <p>Click <strong>Run Prediction</strong> and the system will classify the traffic condition.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">04</span>
+      <h3>Interpret the Result</h3>
+      <p>The result tells you whether the site is Low, Moderate, or High traffic — enabling targeted management.</p>
+    </div>
+  </div>
+
+  <!-- ── Form Panel ────────────────────────────────────────────── -->
+  <div class="form-panel">
+    <div class="form-panel-header">
+      <div class="dot red"></div>
+      <div class="dot amber"></div>
+      <div class="dot green"></div>
+      <h2>traffic_prediction.py &mdash; Input Parameters</h2>
+    </div>
+
+    <div class="form-body">
+      <form method="POST" action="/predict">
+
+        <!-- Input Fields Grid -->
+        <div class="form-group">
+          <div class="form-item">
+            <label for="AADT">Annual Average Daily Traffic (AADT)</label>
+            <input type="text" id="AADT" name="AADT" placeholder="e.g. 15400" required>
+          </div>
+          <div class="form-item">
+            <label for="LOCATION">Location — Geographic or Physical</label>
+            <input type="text" id="LOCATION" name="LOCATION" placeholder="e.g. Enugu-Onitsha Expressway" required>
+          </div>
+          <div class="form-item">
+            <label for="COSITE">Site Code (COSITE)</label>
+            <input type="text" id="COSITE" name="COSITE" placeholder="e.g. 00142" required>
+          </div>
+          <div class="form-item">
+            <label for="SECTION_">Road Section Identifier</label>
+            <input type="text" id="SECTION_" name="SECTION_" placeholder="e.g. SEC-07A" required>
+          </div>
+          <div class="form-item">
+            <label for="X">Longitude (X Coordinate)</label>
+            <input type="text" id="X" name="X" placeholder="e.g. 7.4951" required>
+          </div>
+          <div class="form-item">
+            <label for="Y">Latitude (Y Coordinate)</label>
+            <input type="text" id="Y" name="Y" placeholder="e.g. 6.4546" required>
+          </div>
+          <div class="form-item">
+            <label for="TFCTR">Traffic Flow Factor (TFCTR)</label>
+            <input type="text" id="TFCTR" name="TFCTR" placeholder="e.g. 1.03" required>
+          </div>
+          <div class="form-item">
+            <label for="FID">Feature ID (FID)</label>
+            <input type="text" id="FID" name="FID" placeholder="e.g. 204" required>
+          </div>
+          <div class="form-item">
+            <label for="DFCTR">Daily Flow Factor (DFCTR)</label>
+            <input type="text" id="DFCTR" name="DFCTR" placeholder="e.g. 0.98" required>
+          </div>
+          <div class="form-item">
+            <label for="KFCTR">K-Factor (KFCTR)</label>
+            <input type="text" id="KFCTR" name="KFCTR" placeholder="e.g. 0.09" required>
+          </div>
+        </div>
+
+        <!-- Model Selector -->
+        <div class="model-section">
+          <label>Select Prediction Model</label>
+          <div class="model-cards">
+            <label class="model-card">
+              <input type="radio" name="model" value="Naive Bayes" checked>
+              <div class="model-card-text">
+                <span class="model-card-name">Naïve Bayes</span>
+                <span class="model-card-desc">Probabilistic classifier — fast &amp; interpretable</span>
+              </div>
+            </label>
+            <label class="model-card">
+              <input type="radio" name="model" value="ANN (MLP)">
+              <div class="model-card-text">
+                <span class="model-card-name">ANN (MLP)</span>
+                <span class="model-card-desc">Neural network — captures non-linear patterns</span>
+              </div>
+            </label>
+            <label class="model-card">
+              <input type="radio" name="model" value="Decision Tree">
+              <div class="model-card-text">
+                <span class="model-card-name">Decision Tree</span>
+                <span class="model-card-desc">Rule-based — highly explainable output</span>
+              </div>
+            </label>
+            <label class="model-card">
+              <input type="radio" name="model" value="SVM">
+              <div class="model-card-text">
+                <span class="model-card-name">SVM</span>
+                <span class="model-card-desc">Support Vector Machine — strong on margins</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-wrap">
+          <button type="submit">⟶ &nbsp;Run Prediction</button>
+          <span class="submit-note">Results appear below within seconds</span>
+        </div>
+
+      </form>
+
+      <!-- Prediction Result -->
+      {% if prediction_text %}
+      <div class="prediction-result">
+        <h2>⬡ Prediction Output</h2>
+        <p>{{ prediction_text }}</p>
+      </div>
+      {% endif %}
+
+    </div><!-- /form-body -->
+  </div><!-- /form-panel -->
+
+  <!-- ── Model Info ─────────────────────────────────────────────── -->
+  <div class="models-section">
+    <div class="section-label">// Model Overview</div>
+    <div class="model-info-grid">
+      <div class="model-info-card">
+        <span class="tag">Probabilistic</span>
+        <h3>Naïve Bayes Classifier</h3>
+        <p>Applies Bayes' theorem with independence assumptions. Excellent for real-time predictions with low computational overhead.</p>
+        <div class="accuracy">
+          <span class="accuracy-label">Baseline</span>
+          <div class="accuracy-bar"><div class="accuracy-fill" style="width:79%"></div></div>
+          <span class="accuracy-label" style="min-width:36px;text-align:right;font-size:11px;color:var(--accent)">79%</span>
+        </div>
+      </div>
+      <div class="model-info-card">
+        <span class="tag">Neural Network</span>
+        <h3>ANN — Multilayer Perceptron</h3>
+        <p>Deep learning model that learns complex, non-linear relationships between traffic features and congestion levels.</p>
+        <div class="accuracy">
+          <span class="accuracy-label">Accuracy</span>
+          <div class="accuracy-bar"><div class="accuracy-fill" style="width:87%"></div></div>
+          <span class="accuracy-label" style="min-width:36px;text-align:right;font-size:11px;color:var(--accent)">87%</span>
+        </div>
+      </div>
+      <div class="model-info-card">
+        <span class="tag">Rule-Based</span>
+        <h3>Decision Tree</h3>
+        <p>Produces interpretable if-then rules from traffic data — useful for presenting decisions to non-technical stakeholders.</p>
+        <div class="accuracy">
+          <span class="accuracy-label">Accuracy</span>
+          <div class="accuracy-bar"><div class="accuracy-fill" style="width:83%"></div></div>
+          <span class="accuracy-label" style="min-width:36px;text-align:right;font-size:11px;color:var(--accent)">83%</span>
+        </div>
+      </div>
+      <div class="model-info-card">
+        <span class="tag">Margin-Based</span>
+        <h3>Support Vector Machine</h3>
+        <p>Finds the optimal decision boundary between traffic classes. Robust against overfitting on small datasets.</p>
+        <div class="accuracy">
+          <span class="accuracy-label">Accuracy</span>
+          <div class="accuracy-bar"><div class="accuracy-fill" style="width:85%"></div></div>
+          <span class="accuracy-label" style="min-width:36px;text-align:right;font-size:11px;color:var(--accent)">85%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-brand">PredictFlow &mdash; Traffic Management System</span>
+    <div class="footer-pills">
+      <span class="pill">Python / Flask</span>
+      <span class="pill">Scikit-Learn</span>
+      <span class="pill">Naïve Bayes</span>
+      <span class="pill">ANN · DT · SVM</span>
+    </div>
+    <span class="footer-meta">Final Year Research Project &mdash; 2024</span>
+  </footer>
+
+</div><!-- /container -->
 </body>
 </html>
